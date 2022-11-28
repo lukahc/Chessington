@@ -11,5 +11,10 @@ namespace Chessington.GameEngine.Pieces
         {
             return IsAvailableFuncs.Bishop(currentSquare, newSquare);
         }
+
+        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
+        {
+            return IsUnblockedFuncs.Bishop(currentSquare, newSquare, board);
+        }
     }
 }

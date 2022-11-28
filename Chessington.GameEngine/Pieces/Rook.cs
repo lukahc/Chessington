@@ -10,5 +10,10 @@ namespace Chessington.GameEngine.Pieces
         {
             return IsAvailableFuncs.Rook(currentSquare, newSquare);
         }
+
+        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
+        {
+            return IsUnblockedFuncs.Rook(currentSquare, newSquare, board);
+        }
     }
 }

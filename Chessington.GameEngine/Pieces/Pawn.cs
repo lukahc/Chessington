@@ -10,5 +10,10 @@ namespace Chessington.GameEngine.Pieces
         {
             return IsAvailableFuncs.Pawn(currentSquare, newSquare, this.Player);
         }
+
+        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
+        {
+            return IsUnblockedFuncs.Pawn(currentSquare, newSquare, board);
+        }
     }
 }

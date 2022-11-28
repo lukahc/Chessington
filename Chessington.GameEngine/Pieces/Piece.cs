@@ -25,6 +25,7 @@ namespace Chessington.GameEngine.Pieces
                     if (
                         !newSquare.Equals(currentSquare)
                         && this.IsAvailable(currentSquare, newSquare)
+                        && this.IsUnblocked(currentSquare, newSquare, board)
                     )
                     {
                         availableMoves.Add(newSquare);
@@ -35,6 +36,7 @@ namespace Chessington.GameEngine.Pieces
         }
 
         public abstract bool IsAvailable(Square currentSquare, Square newSquare);
+        public abstract bool IsUnblocked(Square currentSquare, Square newSquare, Board board);
 
         public void MoveTo(Board board, Square newSquare)
         {
