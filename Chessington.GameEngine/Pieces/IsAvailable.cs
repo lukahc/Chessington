@@ -54,7 +54,8 @@ namespace Chessington.GameEngine.Pieces
 
         public static bool King(Square currentSquare, Square newSquare)
         {
-            return false;
+            return Math.Abs(currentSquare.Row - newSquare.Row) <= 1
+                && Math.Abs(currentSquare.Col - newSquare.Col) <= 1;
         }
     }
 }
