@@ -30,6 +30,28 @@ namespace Chessington.GameEngine.Pieces
 
         public static bool Rook(Square currentSquare, Square newSquare, Board board)
         {
+            if (currentSquare.Col == newSquare.Col)
+            {
+                var sign = currentSquare.Row < newSquare.Row ? 1 : -1;
+                for (var i = currentSquare.Row + sign; i != newSquare.Row + sign; i += sign)
+                {
+                    if (board.GetPiece(Square.At(i, currentSquare.Col)) != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                var sign = currentSquare.Col < newSquare.Col ? 1 : -1;
+                for (var i = currentSquare.Col + sign; i != newSquare.Col + sign; i += sign)
+                {
+                    if (board.GetPiece(Square.At(currentSquare.Row, i)) != null)
+                    {
+                        return false;
+                    }
+                }
+            }
             return true;
         }
 
