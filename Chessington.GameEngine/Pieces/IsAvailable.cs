@@ -47,7 +47,9 @@ namespace Chessington.GameEngine.Pieces
 
         public static bool Knight(Square currentSquare, Square newSquare)
         {
-            return false;
+            var rowDiff = Math.Abs(currentSquare.Row - newSquare.Row);
+            var colDiff = Math.Abs(currentSquare.Col - newSquare.Col);
+            return (rowDiff == 1 && colDiff == 2) || (rowDiff == 2 && colDiff == 1);
         }
 
         public static bool King(Square currentSquare, Square newSquare)
