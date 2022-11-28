@@ -13,8 +13,8 @@ namespace Chessington.GameEngine.Pieces
             if (player == Player.White)
             {
                 if (
-                    currentSquare.Row == newSquare.Row + 1
-                    || (currentSquare.Row == 7 && newSquare.Row == 5)
+                    (currentSquare.Row == newSquare.Row + 1)
+                    || (currentSquare.Row == 6 && newSquare.Row == 4)
                 )
                 {
                     return true;
