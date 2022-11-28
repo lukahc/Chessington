@@ -14,10 +14,18 @@ namespace Chessington.GameEngine.Pieces
             if (this.Player == Player.White)
             {
                 availableMoves.Add(Square.At(currentSquare.Row - 1, currentSquare.Col));
+                if (currentSquare.Row == 7)
+                {
+                    availableMoves.Add(Square.At(currentSquare.Row - 2, currentSquare.Col));
+                }
             }
             else
             {
                 availableMoves.Add(Square.At(currentSquare.Row + 1, currentSquare.Col));
+                if (currentSquare.Row == 1)
+                {
+                    availableMoves.Add(Square.At(currentSquare.Row + 2, currentSquare.Col));
+                }
             }
             return availableMoves;
         }
