@@ -6,27 +6,9 @@ namespace Chessington.GameEngine.Pieces
     {
         public Pawn(Player player) : base(player) { }
 
-        public override IEnumerable<Square> GetAvailableMoves(Board board)
+        public override bool IsAvailable(Square currentSquare, Square newSquare)
         {
-            var availableMoves = new List<Square>();
-            var currentSquare = board.FindPiece(this);
-            if (this.Player == Player.White)
-            {
-                availableMoves.Add(Square.At(currentSquare.Row - 1, currentSquare.Col));
-                if (currentSquare.Row == 7)
-                {
-                    availableMoves.Add(Square.At(currentSquare.Row - 2, currentSquare.Col));
-                }
-            }
-            else
-            {
-                availableMoves.Add(Square.At(currentSquare.Row + 1, currentSquare.Col));
-                if (currentSquare.Row == 1)
-                {
-                    availableMoves.Add(Square.At(currentSquare.Row + 2, currentSquare.Col));
-                }
-            }
-            return availableMoves;
+            return IsAvailableFuncs.Pawn(currentSquare, newSquare, this.Player);
         }
     }
 }

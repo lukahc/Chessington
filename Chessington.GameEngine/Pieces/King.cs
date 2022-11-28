@@ -5,12 +5,11 @@ namespace Chessington.GameEngine.Pieces
 {
     public class King : Piece
     {
-        public King(Player player)
-            : base(player) { }
+        public King(Player player) : base(player) { }
 
-        public override IEnumerable<Square> GetAvailableMoves(Board board)
+        public override bool IsAvailable(Square currentSquare, Square newSquare)
         {
-            return Enumerable.Empty<Square>();
+            return IsAvailableFuncs.King(currentSquare, newSquare);
         }
     }
 }
