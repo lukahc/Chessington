@@ -22,7 +22,14 @@ namespace Chessington.GameEngine.Pieces
                 Square.At(currentSquare.Row - 1, currentSquare.Col - 1)
             };
             return availableMoves
-                .Where(move => board.SquareExists(move) && board.GetPiece(move) == null)
+                .Where(
+                    square =>
+                        board.SquareExists(square)
+                        && (
+                            board.GetPiece(square) == null
+                            || board.GetPiece(square).Player != this.Player
+                        )
+                )
                 .ToList();
         }
     }
