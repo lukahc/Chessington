@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -10,41 +12,45 @@ namespace Chessington.GameEngine.Pieces
         {
             var currentSquare = board.FindPiece(this);
             var availableMoves = new List<Square>();
-            if (this.Player == Player.White)
+            var oneSpaceSquare = Square.At(
+                currentSquare.Row + (this.Player == Player.White ? -1 : 1),
+                currentSquare.Col
+            );
+            var twoSpaceSquare = Square.At(
+                currentSquare.Row + (this.Player == Player.White ? -2 : 2),
+                currentSquare.Col
+            );
+            var captureSquareL = Square.At(oneSpaceSquare.Row, currentSquare.Col - 1);
+            var captureSquareR = Square.At(oneSpaceSquare.Row, currentSquare.Col + 1);
+            if (board.SquareExists(oneSpaceSquare) && board.GetPiece(oneSpaceSquare) == null)
             {
-                var oneSpaceSquare = Square.At(currentSquare.Row - 1, currentSquare.Col);
-                if (board.SquareExists(oneSpaceSquare) && board.GetPiece(oneSpaceSquare) == null)
+                availableMoves.Add(oneSpaceSquare);
+                if (
+                    board.SquareExists(twoSpaceSquare)
+                    && board.GetPiece(twoSpaceSquare) == null
+                    && currentSquare.Row == (this.Player == Player.White ? 6 : 1)
+                )
                 {
-                    availableMoves.Add(oneSpaceSquare);
-                    var twoSpaceSquare = Square.At(4, currentSquare.Col);
-                    if (
-                        board.SquareExists(twoSpaceSquare)
-                        && board.GetPiece(twoSpaceSquare) == null
-                        && currentSquare.Row == 6
-                    )
-                    {
-                        availableMoves.Add(twoSpaceSquare);
-                    }
+                    availableMoves.Add(twoSpaceSquare);
                 }
             }
-            else
+            if (
+                board.SquareExists(captureSquareL)
+                && board.GetPiece(captureSquareL) != null
+                && board.GetPiece(captureSquareL).Player != this.Player
+            )
             {
-                var oneSpaceSquare = Square.At(currentSquare.Row + 1, currentSquare.Col);
-                if (board.SquareExists(oneSpaceSquare) && board.GetPiece(oneSpaceSquare) == null)
-                {
-                    availableMoves.Add(oneSpaceSquare);
-                    var twoSpaceSquare = Square.At(3, currentSquare.Col);
-                    if (
-                        board.SquareExists(twoSpaceSquare)
-                        && board.GetPiece(twoSpaceSquare) == null
-                        && currentSquare.Row == 1
-                    )
-                    {
-                        availableMoves.Add(twoSpaceSquare);
-                    }
-                }
+                availableMoves.Add(captureSquareL);
             }
-            return availableMoves;
+            if (
+                board.SquareExists(captureSquareR)
+                && board.GetPiece(captureSquareR) != null
+                && board.GetPiece(captureSquareR).Player != this.Player
+            )
+            {
+                availableMoves.Add(captureSquareR);
+            }
+            return availableMoves.Where(board.SquareExists).ToList();
         }
     }
 }
