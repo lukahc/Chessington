@@ -21,7 +21,7 @@ namespace Chessington.GameEngine.Pieces
             board.MovePiece(currentSquare, newSquare);
         }
 
-        public static List<Square> GetLine(
+        public List<Square> GetLine(
             Board board,
             Square currentSquare,
             int rowIterator,
@@ -29,17 +29,21 @@ namespace Chessington.GameEngine.Pieces
         )
         {
             var availableMoves = new List<Square>();
-            Square square = Square.At(
+            var square = Square.At(
                 currentSquare.Row + rowIterator,
                 currentSquare.Col + colIterator
             );
-            while (board.SquareExists(square) && board.GetPiece(square) == null)
+            while (
+                board.SquareExists(square)
+                && (board.GetPiece(square) == null || board.GetPiece(square).Player != this.Player)
+            )
             {
                 availableMoves.Add(square);
+                if (board.GetPiece(square) != null)
+                {
+                    break;
+                }
                 square = Square.At(square.Row + rowIterator, square.Col + colIterator);
-                Console.WriteLine(square.Row);
-                Console.WriteLine(square.Col);
-                Console.WriteLine(board.SquareExists(square));
             }
             return availableMoves;
         }
