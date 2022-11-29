@@ -6,14 +6,37 @@ namespace Chessington.GameEngine.Pieces
     {
         public Pawn(Player player) : base(player) { }
 
-        public override bool IsAvailable(Square currentSquare, Square newSquare)
+        public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            return IsAvailableFuncs.Pawn(currentSquare, newSquare, this.Player);
-        }
-
-        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
-        {
-            return IsUnblockedFuncs.Pawn(currentSquare, newSquare, board);
+            var currentSquare = board.FindPiece(this);
+            var availableMoves = new List<Square>();
+            if (this.Player == Player.White)
+            {
+                var oneSpaceSquare = Square.At(currentSquare.Row - 1, currentSquare.Col);
+                if (board.GetPiece(oneSpaceSquare) == null)
+                {
+                    availableMoves.Add(oneSpaceSquare);
+                    var twoSpaceSquare = Square.At(4, currentSquare.Col);
+                    if (board.GetPiece(twoSpaceSquare) == null && currentSquare.Row == 6)
+                    {
+                        availableMoves.Add(twoSpaceSquare);
+                    }
+                }
+            }
+            else
+            {
+                var oneSpaceSquare = Square.At(currentSquare.Row + 1, currentSquare.Col);
+                if (board.GetPiece(oneSpaceSquare) == null)
+                {
+                    availableMoves.Add(oneSpaceSquare);
+                    var twoSpaceSquare = Square.At(3, currentSquare.Col);
+                    if (board.GetPiece(twoSpaceSquare) == null && currentSquare.Row == 1)
+                    {
+                        availableMoves.Add(twoSpaceSquare);
+                    }
+                }
+            }
+            return availableMoves;
         }
     }
 }

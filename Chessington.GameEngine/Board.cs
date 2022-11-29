@@ -9,14 +9,13 @@ namespace Chessington.GameEngine
     {
         private readonly Piece[,] board;
         public Player CurrentPlayer { get; private set; }
-        public IList<Piece> CapturedPieces { get; private set; } 
+        public IList<Piece> CapturedPieces { get; private set; }
 
-        public Board()
-            : this(Player.White) { }
+        public Board() : this(Player.White) { }
 
         public Board(Player currentPlayer, Piece[,] boardState = null)
         {
-            board = boardState ?? new Piece[GameSettings.BoardSize, GameSettings.BoardSize]; 
+            board = boardState ?? new Piece[GameSettings.BoardSize, GameSettings.BoardSize];
             CurrentPlayer = currentPlayer;
             CapturedPieces = new List<Piece>();
         }
@@ -25,12 +24,20 @@ namespace Chessington.GameEngine
         {
             board[square.Row, square.Col] = pawn;
         }
-    
+
         public Piece GetPiece(Square square)
         {
             return board[square.Row, square.Col];
         }
-        
+
+        public bool SquareExists(Square square)
+        {
+            return square.Row >= 0
+                && square.Col >= 0
+                && square.Row < GameSettings.BoardSize
+                && square.Col < GameSettings.BoardSize;
+        }
+
         public Square FindPiece(Piece piece)
         {
             for (var row = 0; row < GameSettings.BoardSize; row++)
@@ -44,11 +51,16 @@ namespace Chessington.GameEngine
         public void MovePiece(Square from, Square to)
         {
             var movingPiece = board[from.Row, from.Col];
-            if (movingPiece == null) { return; }
+            if (movingPiece == null)
+            {
+                return;
+            }
 
             if (movingPiece.Player != CurrentPlayer)
             {
-                throw new ArgumentException("The supplied piece does not belong to the current player.");
+                throw new ArgumentException(
+                    "The supplied piece does not belong to the current player."
+                );
             }
 
             //If the space we're moving to is occupied, we need to mark it as captured.
@@ -64,15 +76,16 @@ namespace Chessington.GameEngine
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
         }
-        
+
         public delegate void PieceCapturedEventHandler(Piece piece);
-        
+
         public event PieceCapturedEventHandler PieceCaptured;
 
         protected virtual void OnPieceCaptured(Piece piece)
         {
             var handler = PieceCaptured;
-            if (handler != null) handler(piece);
+            if (handler != null)
+                handler(piece);
         }
 
         public delegate void CurrentPlayerChangedEventHandler(Player player);
@@ -82,7 +95,8 @@ namespace Chessington.GameEngine
         protected virtual void OnCurrentPlayerChanged(Player player)
         {
             var handler = CurrentPlayerChanged;
-            if (handler != null) handler(player);
+            if (handler != null)
+                handler(player);
         }
     }
 }

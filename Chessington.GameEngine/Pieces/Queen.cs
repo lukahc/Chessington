@@ -7,16 +7,18 @@ namespace Chessington.GameEngine.Pieces
     {
         public Queen(Player player) : base(player) { }
 
-        public override bool IsAvailable(Square currentSquare, Square newSquare)
+        public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            return IsAvailableFuncs.Bishop(currentSquare, newSquare)
-                || IsAvailableFuncs.Rook(currentSquare, newSquare);
-        }
-
-        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
-        {
-            return IsUnblockedFuncs.Bishop(currentSquare, newSquare, board)
-                || IsUnblockedFuncs.Rook(currentSquare, newSquare, board);
+            var currentSquare = board.FindPiece(this);
+            var availableMoves = GetLine(board, currentSquare, 1, 0);
+            availableMoves.AddRange(GetLine(board, currentSquare, -1, 0));
+            availableMoves.AddRange(GetLine(board, currentSquare, 0, 1));
+            availableMoves.AddRange(GetLine(board, currentSquare, 0, -1));
+            availableMoves.AddRange(GetLine(board, currentSquare, 1, 1));
+            availableMoves.AddRange(GetLine(board, currentSquare, 1, -1));
+            availableMoves.AddRange(GetLine(board, currentSquare, -1, 1));
+            availableMoves.AddRange(GetLine(board, currentSquare, -1, -1));
+            return availableMoves;
         }
     }
 }

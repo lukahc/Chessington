@@ -7,14 +7,23 @@ namespace Chessington.GameEngine.Pieces
     {
         public Knight(Player player) : base(player) { }
 
-        public override bool IsAvailable(Square currentSquare, Square newSquare)
+        public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
-            return IsAvailableFuncs.Knight(currentSquare, newSquare);
-        }
-
-        public override bool IsUnblocked(Square currentSquare, Square newSquare, Board board)
-        {
-            return IsUnblockedFuncs.Knight(currentSquare, newSquare, board);
+            var currentSquare = board.FindPiece(this);
+            var availableMoves = new List<Square>
+            {
+                Square.At(currentSquare.Row + 2, currentSquare.Col + 1),
+                Square.At(currentSquare.Row + 2, currentSquare.Col - 1),
+                Square.At(currentSquare.Row + 1, currentSquare.Col + 2),
+                Square.At(currentSquare.Row + 1, currentSquare.Col - 2),
+                Square.At(currentSquare.Row - 2, currentSquare.Col + 1),
+                Square.At(currentSquare.Row - 2, currentSquare.Col - 1),
+                Square.At(currentSquare.Row - 1, currentSquare.Col + 2),
+                Square.At(currentSquare.Row - 1, currentSquare.Col - 2)
+            };
+            return availableMoves
+                .Where(move => board.SquareExists(move) && board.GetPiece(move) == null)
+                .ToList();
         }
     }
 }

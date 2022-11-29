@@ -13,35 +13,35 @@ namespace Chessington.GameEngine.Pieces
 
         public Player Player { get; private set; }
 
-        public IEnumerable<Square> GetAvailableMoves(Board board)
-        {
-            var availableMoves = new List<Square>();
-            var currentSquare = board.FindPiece(this);
-            for (var r = 0; r < 8; r++)
-            {
-                for (var c = 0; c < 8; c++)
-                {
-                    var newSquare = Square.At(r, c);
-                    if (
-                        !newSquare.Equals(currentSquare)
-                        && this.IsAvailable(currentSquare, newSquare)
-                        && this.IsUnblocked(currentSquare, newSquare, board)
-                    )
-                    {
-                        availableMoves.Add(newSquare);
-                    }
-                }
-            }
-            return availableMoves;
-        }
-
-        public abstract bool IsAvailable(Square currentSquare, Square newSquare);
-        public abstract bool IsUnblocked(Square currentSquare, Square newSquare, Board board);
+        public abstract IEnumerable<Square> GetAvailableMoves(Board board);
 
         public void MoveTo(Board board, Square newSquare)
         {
             var currentSquare = board.FindPiece(this);
             board.MovePiece(currentSquare, newSquare);
+        }
+
+        public static List<Square> GetLine(
+            Board board,
+            Square currentSquare,
+            int rowIterator,
+            int colIterator
+        )
+        {
+            var availableMoves = new List<Square>();
+            Square square = Square.At(
+                currentSquare.Row + rowIterator,
+                currentSquare.Col + colIterator
+            );
+            while (board.SquareExists(square) && board.GetPiece(square) == null)
+            {
+                availableMoves.Add(square);
+                square = Square.At(square.Row + rowIterator, square.Col + colIterator);
+                Console.WriteLine(square.Row);
+                Console.WriteLine(square.Col);
+                Console.WriteLine(board.SquareExists(square));
+            }
+            return availableMoves;
         }
     }
 }
